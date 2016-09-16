@@ -1,0 +1,16 @@
+﻿@model IEnumerable<MvcBlog2.Models.COMENTARIO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@foreach (var item in Model)
+{
+    <div style="width:500px;float:left;clear:both;border-bottom:1px solid #ccc;">
+        <div style="width:70%;float:left;font-weight:bold;">@item.COM_NOMBREAUTOR</div>
+        <div style="width:30%;float:left;">@item.COM_FECHA</div>
+        <br />
+        @item.COM_DETALLE
+        <br />
+    </div>
+}

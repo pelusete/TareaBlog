@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BloggerBDModelo.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="BloggerBDModeloStoreContainer">
+          <EntitySet Name="BLOG" EntityType="BloggerBDModelo.Store.BLOG" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="COMENTARIO" EntityType="BloggerBDModelo.Store.COMENTARIO" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="POST" EntityType="BloggerBDModelo.Store.POST" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_COMENTAR_POSTCONTI_POST" Association="BloggerBDModelo.Store.FK_COMENTAR_POSTCONTI_POST">
+            <End Role="POST" EntitySet="POST" />
+            <End Role="COMENTARIO" EntitySet="COMENTARIO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_POST_BLOGCONTI_BLOG" Association="BloggerBDModelo.Store.FK_POST_BLOGCONTI_BLOG">
+            <End Role="BLOG" EntitySet="BLOG" />
+            <End Role="POST" EntitySet="POST" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BLOG">
+          <Key>
+            <PropertyRef Name="BLOG_ID" />
+          </Key>
+          <Property Name="BLOG_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BLOG_NOMBRE" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="COMENTARIO">
+          <Key>
+            <PropertyRef Name="COM_ID" />
+          </Key>
+          <Property Name="COM_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="POST_ID" Type="int" Nullable="false" />
+          <Property Name="COM_FECHA" Type="datetime" />
+          <Property Name="COM_NOMBREAUTOR" Type="varchar" MaxLength="50" />
+          <Property Name="COM_DETALLE" Type="text" />
+        </EntityType>
+        <EntityType Name="POST">
+          <Key>
+            <PropertyRef Name="POST_ID" />
+          </Key>
+          <Property Name="POST_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BLOG_ID" Type="int" Nullable="false" />
+          <Property Name="POST_FECHA" Type="datetime" />
+          <Property Name="POST_TITULO" Type="varchar" MaxLength="100" />
+          <Property Name="POST_DESCRIPCION" Type="text" />
+          <Property Name="POST_IMAGEN" Type="text" />
+          <Property Name="POST_TAGS" Type="text" />
+          <Property Name="POST_NOMBREAUTOR" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_COMENTAR_POSTCONTI_POST">
+          <End Role="POST" Type="BloggerBDModelo.Store.POST" Multiplicity="1" />
+          <End Role="COMENTARIO" Type="BloggerBDModelo.Store.COMENTARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POST">
+              <PropertyRef Name="POST_ID" />
+            </Principal>
+            <Dependent Role="COMENTARIO">
+              <PropertyRef Name="POST_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_POST_BLOGCONTI_BLOG">
+          <End Role="BLOG" Type="BloggerBDModelo.Store.BLOG" Multiplicity="1" />
+          <End Role="POST" Type="BloggerBDModelo.Store.POST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BLOG">
+              <PropertyRef Name="BLOG_ID" />
+            </Principal>
+            <Dependent Role="POST">
+              <PropertyRef Name="BLOG_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BloggerBDModelo" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BloggerBDEntidades" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="BLOGs" EntityType="BloggerBDModelo.BLOG" />
+          <EntitySet Name="COMENTARIOs" EntityType="BloggerBDModelo.COMENTARIO" />
+          <EntitySet Name="POSTs" EntityType="BloggerBDModelo.POST" />
+          <AssociationSet Name="FK_POST_BLOGCONTI_BLOG" Association="BloggerBDModelo.FK_POST_BLOGCONTI_BLOG">
+            <End Role="BLOG" EntitySet="BLOGs" />
+            <End Role="POST" EntitySet="POSTs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COMENTAR_POSTCONTI_POST" Association="BloggerBDModelo.FK_COMENTAR_POSTCONTI_POST">
+            <End Role="POST" EntitySet="POSTs" />
+            <End Role="COMENTARIO" EntitySet="COMENTARIOs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BLOG">
+          <Key>
+            <PropertyRef Name="BLOG_ID" />
+          </Key>
+          <Property Name="BLOG_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="BLOG_NOMBRE" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="POSTs" Relationship="BloggerBDModelo.FK_POST_BLOGCONTI_BLOG" FromRole="BLOG" ToRole="POST" />
+        </EntityType>
+        <EntityType Name="COMENTARIO">
+          <Key>
+            <PropertyRef Name="COM_ID" />
+          </Key>
+          <Property Name="COM_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="POST_ID" Type="Int32" Nullable="false" />
+          <Property Name="COM_FECHA" Type="DateTime" Precision="3" />
+          <Property Name="COM_NOMBREAUTOR" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="COM_DETALLE" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="POST" Relationship="BloggerBDModelo.FK_COMENTAR_POSTCONTI_POST" FromRole="COMENTARIO" ToRole="POST" />
+        </EntityType>
+        <EntityType Name="POST">
+          <Key>
+            <PropertyRef Name="POST_ID" />
+          </Key>
+          <Property Name="POST_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="BLOG_ID" Type="Int32" Nullable="false" />
+          <Property Name="POST_FECHA" Type="DateTime" Precision="3" />
+          <Property Name="POST_TITULO" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="POST_DESCRIPCION" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="POST_IMAGEN" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="POST_TAGS" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="POST_NOMBREAUTOR" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="BLOG" Relationship="BloggerBDModelo.FK_POST_BLOGCONTI_BLOG" FromRole="POST" ToRole="BLOG" />
+          <NavigationProperty Name="COMENTARIOs" Relationship="BloggerBDModelo.FK_COMENTAR_POSTCONTI_POST" FromRole="POST" ToRole="COMENTARIO" />
+        </EntityType>
+        <Association Name="FK_POST_BLOGCONTI_BLOG">
+          <End Role="BLOG" Type="BloggerBDModelo.BLOG" Multiplicity="1" />
+          <End Role="POST" Type="BloggerBDModelo.POST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BLOG">
+              <PropertyRef Name="BLOG_ID" />
+            </Principal>
+            <Dependent Role="POST">
+              <PropertyRef Name="BLOG_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_COMENTAR_POSTCONTI_POST">
+          <End Role="POST" Type="BloggerBDModelo.POST" Multiplicity="1" />
+          <End Role="COMENTARIO" Type="BloggerBDModelo.COMENTARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POST">
+              <PropertyRef Name="POST_ID" />
+            </Principal>
+            <Dependent Role="COMENTARIO">
+              <PropertyRef Name="POST_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BloggerBDModeloStoreContainer" CdmEntityContainer="BloggerBDEntidades">
+          <EntitySetMapping Name="BLOGs">
+            <EntityTypeMapping TypeName="BloggerBDModelo.BLOG">
+              <MappingFragment StoreEntitySet="BLOG">
+                <ScalarProperty Name="BLOG_ID" ColumnName="BLOG_ID" />
+                <ScalarProperty Name="BLOG_NOMBRE" ColumnName="BLOG_NOMBRE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COMENTARIOs">
+            <EntityTypeMapping TypeName="BloggerBDModelo.COMENTARIO">
+              <MappingFragment StoreEntitySet="COMENTARIO">
+                <ScalarProperty Name="COM_ID" ColumnName="COM_ID" />
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+                <ScalarProperty Name="COM_FECHA" ColumnName="COM_FECHA" />
+                <ScalarProperty Name="COM_NOMBREAUTOR" ColumnName="COM_NOMBREAUTOR" />
+                <ScalarProperty Name="COM_DETALLE" ColumnName="COM_DETALLE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="POSTs">
+            <EntityTypeMapping TypeName="BloggerBDModelo.POST">
+              <MappingFragment StoreEntitySet="POST">
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+                <ScalarProperty Name="BLOG_ID" ColumnName="BLOG_ID" />
+                <ScalarProperty Name="POST_FECHA" ColumnName="POST_FECHA" />
+                <ScalarProperty Name="POST_TITULO" ColumnName="POST_TITULO" />
+                <ScalarProperty Name="POST_DESCRIPCION" ColumnName="POST_DESCRIPCION" />
+                <ScalarProperty Name="POST_IMAGEN" ColumnName="POST_IMAGEN" />
+                <ScalarProperty Name="POST_TAGS" ColumnName="POST_TAGS" />
+                <ScalarProperty Name="POST_NOMBREAUTOR" ColumnName="POST_NOMBREAUTOR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

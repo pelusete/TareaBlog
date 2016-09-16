@@ -1,0 +1,136 @@
+﻿@model MvcBlog2.Models.POST
+
+@{
+    ViewBag.Title = "Details";
+
+    string rutaImagen = Model.POST_IMAGEN;
+    if (rutaImagen == "")
+    {
+        rutaImagen = "~/Content/img/sinFoto.jpg";
+    }
+}
+
+<h2>Detalle del Post</h2>
+
+<fieldset>
+    <legend>Detalle</legend>
+
+    <img src="@Url.Content(@rutaImagen)" alt="imagen post" style="width:200px;height:200px;" /><br />
+    
+    <b>ID</b>: @Model.POST_ID<br />
+    <b>Título: </b>@Model.POST_TITULO<br />
+    <b>Descripción: </b>@Model.POST_DESCRIPCION<br />
+    
+</fieldset>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id=Model.BLOG_ID }) |
+    @Html.ActionLink("Regresar", "Index")
+</p>
+    <h2>Comentarios de este Post</h2>
+    <div>
+        <b>Realiza un Comentario</b><br />
+        <input type="hidden" id="idPost" name="idPost" value="@Model.POST_ID"/>
+        <input type="text" id="comentarioUsuario" name="comentarioUsuario" value="" /><br />
+        <input type="button" id="btn_Comentar" value="Comentar"/>
+    </div><br />
+    <div id="contenedorComentarios"></div>    <!-- Contenedor de comentarios registrados -->
+    <br />
+    
+
+@section Scripts{
+    <!--<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.min.js")"></script>-->
+    <script type="text/javascript">
+
+        /*
+            DetalleHTML_Comentario(objData)
+            -----------------------------------------
+            - Funcion JavaScript que genera el contenido HTML de un objeto comentario entregado por parametro
+            - Se reutiliza dos veces, una vez cuando se cargan todos los comentarios del post y la otra cuando se genera uno nuevo para su visualización inmediata
+        */
+        function DetalleHTML_Comentario(objData)
+        {
+           return "<div style='width:500px;float:left;clear:both;border-bottom:1px solid #ccc;'>" +
+                    "<div style='width:70%;float:left;font-weight:bold;'>" + objData.NombreAutor + "</div>" +
+                    "<div style='width:30%;float:left;'>" + objData.Fecha + "</div>" +
+                    "<br />" +
+                    objData.Detalle +
+                    "<br />" +
+                    "</div>";
+        }
+
+        /*
+            CargarComentariosPost(idPost)
+            -----------------------------------------
+            - Funcion JavaScript que carga via AJAX todos los comentarios de un post dado (id)
+            - Se utiliza una vez al inicio de la pagina
+        */
+        function CargarComentariosPost(idPost)
+        {
+            $.ajax({
+                //aync: true,
+                type: "post",
+                url: "@Url.Content("~/Ajax/")",
+                beforeSend: function () { $("#contenedorComentarios").html("Cargando Comentarios..."); },
+                data: ({ acc:"POST_CARGAR_COMENTARIOS", idPost: idPost }),
+                //contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function (laData)
+                {
+                    var htmlComentarios = "";
+                    var laData = $.parseJSON(laData);
+                    //console.log(laData);
+                    for (var i = 0; i < laData.length; i++)
+                    {
+                        var objData = laData[i];
+
+                        htmlComentarios += DetalleHTML_Comentario(objData);
+                    }
+                    
+                    $("#contenedorComentarios").html(htmlComentarios);
+                },
+                error: function (xhr, ajaxOptions, thrownError)
+                {
+                     $("#contenedorComentarios").html(xhr.status + " | " + thrownError + "<br>" + xhr.responseText);
+                }
+            });
+        }
+
+        $(document).ready(function ()
+        {
+            $("#btn_Comentar").click(function ()
+            {
+                var idPost = $("#idPost").val();
+                var nombreAutor = "Un Nombre de Persona";
+                var comentarioUsuario = $("#comentarioUsuario").val();
+
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Content("~/Ajax/")",
+                    beforeSend: function () { $("#contenedorComentarios").html("Enviando..."); },
+                    data: ({ acc: "POST_COMENTAR", idPost: idPost, nombreAutor: nombreAutor, comentarioUsuario: comentarioUsuario }),
+                    dataType: "json",
+                    success: function (laData)
+                    {
+                        var htmlComentarios = "";
+                        var laData = $.parseJSON(laData);
+                        //console.log(laData);
+                        for (var i = 0; i < laData.length; i++)
+                        {
+                            var objData = laData[i];
+
+                            htmlComentarios += DetalleHTML_Comentario(objData);
+                        }
+
+                        $("#contenedorComentarios").html(htmlComentarios);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError)
+                    {
+                        $("#contenedorComentarios").html(xhr.status + " | " + thrownError + "<br>" + xhr.responseText);
+                    }
+                });
+            });
+
+            CargarComentariosPost(@Model.POST_ID);
+        });
+    </script>
+}

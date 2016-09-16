@@ -1,0 +1,66 @@
+﻿@model PagedList.IPagedList<MvcBlog2.Models.POST>
+@using PagedList.Mvc;
+<link href="~/Content/css/PagedList.css" rel="stylesheet" media="all" />
+@{
+    
+ }
+
+<h1>Post Registrados</h1>
+
+@Html.ActionLink("Nuevo Post", "Create", new { currentFilter = ViewBag.CurrentFilter })
+
+@using (Html.BeginForm("Index","Blog",FormMethod.Get))
+        {    
+         <p>
+         Tag Name: @Html.TextBox("txt_SearchTag", ViewBag.CurrentFilter as string)  
+         <input type="submit" value="Search" />
+         </p>
+        }
+
+<table>
+        <tr>
+            <th>IMAGEN</th>
+            <th>FECHA</th>
+            <th>BLOG ID</th>
+            <th>TITULO</th>
+            <th>TAGS</th>
+            <th>Acc.</th>
+        </tr>
+
+@{
+    foreach (var item in Model)
+    {
+        string rutaImagen = item.POST_IMAGEN;
+        if (rutaImagen == ""){ rutaImagen = "~/Content/img/sinFoto.jpg"; }
+        <tr>
+        <td><img src="@Url.Content(rutaImagen)" alt="imagen del post" style="width:150px;height:150px;"/>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.POST_FECHA)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BLOG_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.POST_TITULO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.POST_TAGS)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.POST_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.POST_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.POST_ID })
+        </td>
+        </tr>
+    }
+}
+
+</table>
+<br />
+<br />  
+    <div id='Paging' style="text-align: center">  
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount  
+  
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))  
+    </div>

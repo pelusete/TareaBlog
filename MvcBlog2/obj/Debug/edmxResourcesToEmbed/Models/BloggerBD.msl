@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BloggerBDModeloStoreContainer" CdmEntityContainer="BloggerBDEntidades">
+    <EntitySetMapping Name="BLOGs">
+      <EntityTypeMapping TypeName="BloggerBDModelo.BLOG">
+        <MappingFragment StoreEntitySet="BLOG">
+          <ScalarProperty Name="BLOG_ID" ColumnName="BLOG_ID" />
+          <ScalarProperty Name="BLOG_NOMBRE" ColumnName="BLOG_NOMBRE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COMENTARIOs">
+      <EntityTypeMapping TypeName="BloggerBDModelo.COMENTARIO">
+        <MappingFragment StoreEntitySet="COMENTARIO">
+          <ScalarProperty Name="COM_ID" ColumnName="COM_ID" />
+          <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+          <ScalarProperty Name="COM_FECHA" ColumnName="COM_FECHA" />
+          <ScalarProperty Name="COM_NOMBREAUTOR" ColumnName="COM_NOMBREAUTOR" />
+          <ScalarProperty Name="COM_DETALLE" ColumnName="COM_DETALLE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="POSTs">
+      <EntityTypeMapping TypeName="BloggerBDModelo.POST">
+        <MappingFragment StoreEntitySet="POST">
+          <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+          <ScalarProperty Name="BLOG_ID" ColumnName="BLOG_ID" />
+          <ScalarProperty Name="POST_FECHA" ColumnName="POST_FECHA" />
+          <ScalarProperty Name="POST_TITULO" ColumnName="POST_TITULO" />
+          <ScalarProperty Name="POST_DESCRIPCION" ColumnName="POST_DESCRIPCION" />
+          <ScalarProperty Name="POST_IMAGEN" ColumnName="POST_IMAGEN" />
+          <ScalarProperty Name="POST_TAGS" ColumnName="POST_TAGS" />
+          <ScalarProperty Name="POST_NOMBREAUTOR" ColumnName="POST_NOMBREAUTOR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

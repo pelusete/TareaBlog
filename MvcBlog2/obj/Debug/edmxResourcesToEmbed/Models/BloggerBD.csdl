@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BloggerBDModelo" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="BloggerBDEntidades" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="BLOGs" EntityType="BloggerBDModelo.BLOG" />
+    <EntitySet Name="COMENTARIOs" EntityType="BloggerBDModelo.COMENTARIO" />
+    <EntitySet Name="POSTs" EntityType="BloggerBDModelo.POST" />
+    <AssociationSet Name="FK_POST_BLOGCONTI_BLOG" Association="BloggerBDModelo.FK_POST_BLOGCONTI_BLOG">
+      <End Role="BLOG" EntitySet="BLOGs" />
+      <End Role="POST" EntitySet="POSTs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_COMENTAR_POSTCONTI_POST" Association="BloggerBDModelo.FK_COMENTAR_POSTCONTI_POST">
+      <End Role="POST" EntitySet="POSTs" />
+      <End Role="COMENTARIO" EntitySet="COMENTARIOs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="BLOG">
+    <Key>
+      <PropertyRef Name="BLOG_ID" />
+    </Key>
+    <Property Name="BLOG_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="BLOG_NOMBRE" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="POSTs" Relationship="BloggerBDModelo.FK_POST_BLOGCONTI_BLOG" FromRole="BLOG" ToRole="POST" />
+  </EntityType>
+  <EntityType Name="COMENTARIO">
+    <Key>
+      <PropertyRef Name="COM_ID" />
+    </Key>
+    <Property Name="COM_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="POST_ID" Type="Int32" Nullable="false" />
+    <Property Name="COM_FECHA" Type="DateTime" Precision="3" />
+    <Property Name="COM_NOMBREAUTOR" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="COM_DETALLE" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="POST" Relationship="BloggerBDModelo.FK_COMENTAR_POSTCONTI_POST" FromRole="COMENTARIO" ToRole="POST" />
+  </EntityType>
+  <EntityType Name="POST">
+    <Key>
+      <PropertyRef Name="POST_ID" />
+    </Key>
+    <Property Name="POST_ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="BLOG_ID" Type="Int32" Nullable="false" />
+    <Property Name="POST_FECHA" Type="DateTime" Precision="3" />
+    <Property Name="POST_TITULO" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="POST_DESCRIPCION" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="POST_IMAGEN" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="POST_TAGS" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="POST_NOMBREAUTOR" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="BLOG" Relationship="BloggerBDModelo.FK_POST_BLOGCONTI_BLOG" FromRole="POST" ToRole="BLOG" />
+    <NavigationProperty Name="COMENTARIOs" Relationship="BloggerBDModelo.FK_COMENTAR_POSTCONTI_POST" FromRole="POST" ToRole="COMENTARIO" />
+  </EntityType>
+  <Association Name="FK_POST_BLOGCONTI_BLOG">
+    <End Role="BLOG" Type="BloggerBDModelo.BLOG" Multiplicity="1" />
+    <End Role="POST" Type="BloggerBDModelo.POST" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BLOG">
+        <PropertyRef Name="BLOG_ID" />
+      </Principal>
+      <Dependent Role="POST">
+        <PropertyRef Name="BLOG_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_COMENTAR_POSTCONTI_POST">
+    <End Role="POST" Type="BloggerBDModelo.POST" Multiplicity="1" />
+    <End Role="COMENTARIO" Type="BloggerBDModelo.COMENTARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POST">
+        <PropertyRef Name="POST_ID" />
+      </Principal>
+      <Dependent Role="COMENTARIO">
+        <PropertyRef Name="POST_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

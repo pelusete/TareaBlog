@@ -1,0 +1,63 @@
+﻿@model MvcBlog2.Models.mPost
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Post</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <b>Fecha</b><br />
+        @Model.Fecha;
+
+        <br />
+        <img src="@Url.Content(@Model.Imagen)" alt="Imagen del Post" width="300" height="200" />
+        <br />
+        <b>Subir Imagen</b><br /> 
+        <input type="file" name="post_Imagen" style="width: 300px" /><br />
+
+        <b>Titulo</b><br />
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Titulo)
+            @Html.ValidationMessageFor(model => model.Titulo)
+        </div>
+
+        <b>Descripción</b><br />
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Descripcion)
+            @Html.ValidationMessageFor(model => model.Descripcion)
+        </div>
+
+        <b>Tags</b><br />
+        <div class="editor-field">
+            @{
+                string losTag = "";
+                foreach (var tag in Model.Tags)
+                { losTag+=@tag+","; }
+             }
+            <input type="text" name="Tags" value="@losTag"/>
+        </div>
+
+        <b>Autor</b><br />
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NombreAutor)
+            @Html.ValidationMessageFor(model => model.NombreAutor)
+        </div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Regresar", "Index")
+</div>

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BloggerBDModelo.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="BloggerBDModeloStoreContainer">
+    <EntitySet Name="BLOG" EntityType="BloggerBDModelo.Store.BLOG" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="COMENTARIO" EntityType="BloggerBDModelo.Store.COMENTARIO" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="POST" EntityType="BloggerBDModelo.Store.POST" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_COMENTAR_POSTCONTI_POST" Association="BloggerBDModelo.Store.FK_COMENTAR_POSTCONTI_POST">
+      <End Role="POST" EntitySet="POST" />
+      <End Role="COMENTARIO" EntitySet="COMENTARIO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POST_BLOGCONTI_BLOG" Association="BloggerBDModelo.Store.FK_POST_BLOGCONTI_BLOG">
+      <End Role="BLOG" EntitySet="BLOG" />
+      <End Role="POST" EntitySet="POST" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="BLOG">
+    <Key>
+      <PropertyRef Name="BLOG_ID" />
+    </Key>
+    <Property Name="BLOG_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="BLOG_NOMBRE" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="COMENTARIO">
+    <Key>
+      <PropertyRef Name="COM_ID" />
+    </Key>
+    <Property Name="COM_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="POST_ID" Type="int" Nullable="false" />
+    <Property Name="COM_FECHA" Type="datetime" />
+    <Property Name="COM_NOMBREAUTOR" Type="varchar" MaxLength="50" />
+    <Property Name="COM_DETALLE" Type="text" />
+  </EntityType>
+  <EntityType Name="POST">
+    <Key>
+      <PropertyRef Name="POST_ID" />
+    </Key>
+    <Property Name="POST_ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="BLOG_ID" Type="int" Nullable="false" />
+    <Property Name="POST_FECHA" Type="datetime" />
+    <Property Name="POST_TITULO" Type="varchar" MaxLength="100" />
+    <Property Name="POST_DESCRIPCION" Type="text" />
+    <Property Name="POST_IMAGEN" Type="text" />
+    <Property Name="POST_TAGS" Type="text" />
+    <Property Name="POST_NOMBREAUTOR" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_COMENTAR_POSTCONTI_POST">
+    <End Role="POST" Type="BloggerBDModelo.Store.POST" Multiplicity="1" />
+    <End Role="COMENTARIO" Type="BloggerBDModelo.Store.COMENTARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POST">
+        <PropertyRef Name="POST_ID" />
+      </Principal>
+      <Dependent Role="COMENTARIO">
+        <PropertyRef Name="POST_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POST_BLOGCONTI_BLOG">
+    <End Role="BLOG" Type="BloggerBDModelo.Store.BLOG" Multiplicity="1" />
+    <End Role="POST" Type="BloggerBDModelo.Store.POST" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BLOG">
+        <PropertyRef Name="BLOG_ID" />
+      </Principal>
+      <Dependent Role="POST">
+        <PropertyRef Name="BLOG_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

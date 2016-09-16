@@ -1,0 +1,30 @@
+﻿@model MvcBlog2.Models.mPost
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>POST</legend>
+
+    <legend>Detalle</legend>
+
+    <img src="@Url.Content(@Model.Imagen)" alt="imagen post" style="width:200px;height:200px;" /><br />
+    
+    <b>ID</b>: @Model.Id<br />
+    <b>Fecha: </b>@Model.Fecha<br />
+    <b>Título: </b>@Model.Titulo<br />
+    <b>Descripción: </b>@Model.Descripcion<br />
+
+
+</fieldset>
+@using (Html.BeginForm())
+{
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
